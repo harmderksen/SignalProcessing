@@ -1,7 +1,7 @@
 % function [a] =TVDenoise1D(c,order,x,delta)
 % finds best l_2 approximation a of c, with the constraint that
-% the absolute value of the d-fold integral of c-a is bounded by x, 
-% where d='order'+2
+% the d-fold integral of c-a is bounded by x, where d='order'+2
+% 
 %
 % input: 
 % c: input function (row vector)
