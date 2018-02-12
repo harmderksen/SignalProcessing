@@ -1,0 +1,31 @@
+name='mitdb/104';
+%[f,freq,tm]=rdsamp(name,[]);
+%[ann,anntype,subtype,chan,num,comments]=rdann(name,'atr');
+%f=f(:,1)';
+%n=length(f);
+%g=PeakFilter(f,360);
+beat_list={'.','N','L','R','A','a','J','S','V','F','e','j','E','/','f','Q'};
+s=length(beat_list);
+h=[];
+file_list={'mitdb/100','mitdb/101','mitdb/102','mitdb/103','mitdb/104','mitdb/105', ...
+    'mitdb/106','mitdb/107','mitdb/108','mitdb/109','mitdb/111','mitdb/112','mitdb/113','mitdb/114', ...
+    'mitdb/115','mitdb/116','mitdb/117','mitdb/118','mitdb/119','mitdb/121','mitdb/122','mitdb/123', ...
+    'mitdb/124','mitdb/200','mitdb/108','mitdb/109','mitdb/111','mitdb/112','mitdb/113','mitdb/114', ...
+t=length(file_list);
+for j=1:t
+    name=file_list{j}
+    [f,freq,tm]=rdsamp(name,[]);
+    f=f(:,1)';
+    n=length(f);
+    g=PeakFilter(f,360);
+    [ann,anntype,subtype,chan,num,comments]=rdann(name,'atr');
+    for i=1:s
+        x=find(anntype==beat_list{i});
+        h=[h,g(ann(x))];
+    end
+end
+h=sort(h);
+plot(h);
+
+
+

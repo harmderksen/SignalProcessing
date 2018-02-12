@@ -19,6 +19,7 @@ function [a] =TVDenoise1D(c,order,x,delta)
 x=x/2^(order+2);
 n=length(c);
 e=zeros(1,n);
+De=zeros(1,n);
 u=0;
 w=c;
 if mod(order,2)==1
