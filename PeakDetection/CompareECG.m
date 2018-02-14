@@ -2,7 +2,11 @@
 %    load 'Y:\Projects\ARDS_Private\Waveforms\10146_W000106858_2017-01-05.mat';
 %    MLPFflag=1;
 %end
-[f,freq,tm]=rdsamp('challenge/2017/training/A00/A00032',[]);
+[f,freq,tm]=rdsamp('challenge/2017/training/A00/A00042',[]);
+%[f,freq,tm]=rdsamp('mitdb/204',[]);
+%f=f(100000:120000,1);
+
+
 %freq=ECG_Waveform_I.frequency;
 %g=ECG_Waveform_I.wave;
 %n=length(g);

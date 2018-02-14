@@ -8,9 +8,18 @@ file_list={'mitdb/100','mitdb/101','mitdb/103','mitdb/105', ...
      'mitdb/209','mitdb/210','mitdb/201','mitdb/212','mitdb/213','mitdb/214','mitdb/215', ...
       'mitdb/219','mitdb/220','mitdb/221','mitdb/222','mitdb/223','mitdb/228','mitdb/230','mitdb/231', ...
        'mitdb/232','mitdb/233','mitdb/234'};
+
+%file_list={'mitdb/203','mitdb/208','mitdb/207','mitdb/228','mitdb/232'};
+
 t=length(file_list);
 u=[];
+    total_trueP=0;
+    total_falseP=0;
+    total_falseN=0;
 for j=1:t
+    trueP=0;
+    falseP=0;
+    falseN=0;
     h=[];
     name=file_list{j}
     [ann,anntype,subtype,chan,num,comments]=rdann(name,'atr');
@@ -21,6 +30,7 @@ for j=1:t
     end
     h=sort(h);
     [f,freq,tm]=rdsamp(name,[]);
+    f=f(:,1)';
     g=PeakDetection(f,360);
     number_predicted_peaks=length(g);
     number_peaks=length(h);
@@ -34,7 +44,7 @@ for j=1:t
         else
             q=min(a(i)-a(i-1),a(i+1)-a(i));
         end
-        if q<.05
+        if q<.05*freq
             if b(i)<=number_predicted_peaks
                 trueP=trueP+1;
             end
@@ -44,20 +54,18 @@ for j=1:t
             else
                 falseN=falseN+1;
             end
-            
-                
-                
-            
-            
-        if min(a(i)-a(i-1)
+        end
+    end
+    trueP
+    falseP
+    falseN
+    Precision=trueP/(trueP+falseP)
+    Recall=trueP/(trueP+falseN)
+    total_trueP=total_trueP+trueP;
+    total_falseP=total_falseP+falseP;
+    total_falseN=total_falseN+falseN;
+    total_Precision=total_trueP/(total_trueP+total_falseP)
+    total_Recall=total_trueP/(total_trueP+total_falseN)
+    
 end
-u=sort(u);
-w=zeros(360*4,1);
-for i=1:360*4
-    w(i)=sum(u==i);
-end
-plot(w);
-
-
-
 

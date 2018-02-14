@@ -1,21 +1,35 @@
 function [peak_list] = PeakDetection(ecg,freq )
-f=PeakFilter(ecg,freq);
-x=0;
-n=length(f);
+% function [peak_list] = PeakDetection(ecg,freq )
+%
+% input:
+% ecg : ecg wave form, row vector
+% freq: sampling frequency
+%
+% output:
+% peak_list: row vector, where the entries are the positions in the vector
+% 'ecg' that correspond to the peaks (divide by 'freq' to get the times of
+% the peaks in seconds
+%
+n=length(ecg);
+ecg=conv(ecg,ones(1,round(freq*.02)),'same');
+f=PeakFilter(ecg,freq); % apply the special filter that enhances peaks
 peak_list=[];
-    t0=round(.25*freq);
-    t1=round(.7*freq);
-    t2=round(1.1*freq);
-    t3=round(1.5*freq);
-    shape=[zeros(1,t0),[1:t1-t0]/(t1-t0)*8,8-[1:t2-t1]/(t2-t1)*7,1-[1:t3-t2]/(t3-t2)];
+
+t=[1:4*freq]/freq; 
+shape=t.^2./(1+100*(t-.2).^4); % shape is the anticipation curve
+%   plot(shape);pause;
     ls=length(shape);
-while x<n
+while x+.25*freq<n
     m=min(ls,n-x);
     [u,y]=max(shape(1:m).*f(x+1:x+m));
-     x=x+y
+     x=x+y;
      if m==ls
         peak_list=[peak_list,x];
      else
+         if shape(y)*f(x)>shape(n-x+y)*(.3)
+             peak_list=[peak_list,x];
+         end
+     end
          
 end
 plot(ecg);

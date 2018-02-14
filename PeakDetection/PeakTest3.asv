@@ -11,6 +11,9 @@ file_list={'mitdb/100','mitdb/101','mitdb/103','mitdb/105', ...
 t=length(file_list);
 u=[];
 for j=1:t
+    trueP=0;
+    falseP=0;
+    falseN=0;
     h=[];
     name=file_list{j}
     [ann,anntype,subtype,chan,num,comments]=rdann(name,'atr');
@@ -21,16 +24,36 @@ for j=1:t
     end
     h=sort(h);
     [f,freq,tm]=rdsamp(name,[]);
-    g=PeakDetection(f,360);
-    [g,h]=
+    g=PeakDetection(f(:,1)',360);
+    number_predicted_peaks=length(g);
+    number_peaks=length(h);
+    [a,b]=sort([g,h]);
+    la=length(a);
+    for i=1:la
+        if i==1
+            q=a(2)-a(1);
+        elseif i==la
+            q=a(la)-a(la-1);
+        else
+            q=min(a(i)-a(i-1),a(i+1)-a(i));
+        end
+        if q<.05*freq
+            if b(i)<=number_predicted_peaks
+                trueP=trueP+1;
+            end
+        else
+            if b(i)<=number_predicted_peaks
+                falseP=falseP+1;
+            else
+                falseN=falseN+1;
+            end
+        end
+    end
+    trueP
+    falseP
+    falseN
+    total_trueP=total_trueP+trueP;
+    total_falseP=total_falseP+falseP;
+    total_falseN=total_falseN+falseN;
 end
-u=sort(u);
-w=zeros(360*4,1);
-for i=1:360*4
-    w(i)=sum(u==i);
-end
-plot(w);
-
-
-
 
